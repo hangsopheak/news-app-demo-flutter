@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:news_app_demo_flutter/shared/theme/theme.dart';
 
 void main() {
   runApp(const MainApp());
@@ -9,10 +10,18 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return  MaterialApp(
+      themeMode: ThemeMode.system,
+      theme: NewsAppTheme.lightTheme,
+      darkTheme: NewsAppTheme.darkTheme,
       home: Scaffold(
         body: Center(
-          child: Text('Hello World!'),
+          child: ElevatedButton(
+              onPressed: () => {},
+              child: const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text("TEST THEME"),
+              )),
         ),
       ),
     );
