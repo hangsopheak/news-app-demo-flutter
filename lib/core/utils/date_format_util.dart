@@ -1,6 +1,8 @@
 // Note: This file requires the 'intl' package dependency.
 // Add intl: ^0.18.0 (or the latest version) to your pubspec.yaml.
 
+import 'dart:math';
+
 import 'package:intl/intl.dart';
 
 /// A class containing constant string formats for date and time.
@@ -167,6 +169,11 @@ extension DateTimeExtension on DateTime {
 class DateTimeUtil {
   // --- Parsing ---
 
+  static DateTime randomPublishedAt(int maxMinutesAgo) {
+    final minutesAgo = Random().nextInt(maxMinutesAgo) + 1;
+    final Duration duration = Duration(minutes: minutesAgo);
+    return DateTime.now().subtract(duration);
+  }
   /// Parses a date string using a custom pattern.
   static DateTime? parseDate(String dateString, String pattern,
       {String? locale}) {

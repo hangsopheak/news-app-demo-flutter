@@ -1,6 +1,7 @@
 // Utility class to provide static access to the main onboarding flow data.
 
-import 'package:news_app_demo_flutter/features/onboarding/model/onboarding_section.dart';
+
+import 'package:news_app_demo_flutter/features/onboarding/domain/model/onboarding_section.dart';
 
 class OnboardingSectionData {
   // We use static methods/fields instead of a Kotlin 'object' class.
