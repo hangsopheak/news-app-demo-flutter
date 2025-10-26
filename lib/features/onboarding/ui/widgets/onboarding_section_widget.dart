@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:news_app_demo_flutter/features/onboarding/model/onboarding_section.dart';
+import 'package:news_app_demo_flutter/features/onboarding/domain/model/onboarding_section.dart';
 
 class OnboardingSectionWidget extends StatelessWidget {
   final OnboardingSection onboardingSection;
