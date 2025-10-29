@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widget_previews.dart';
+import 'package:news_app_demo_flutter/features/article/ui/article_detail_screen.dart';
 import 'package:news_app_demo_flutter/features/explore/ui/widget/category_filter_chip.dart';
 import 'package:news_app_demo_flutter/shared/data/local/article_data.dart';
 import 'package:news_app_demo_flutter/shared/data/local/category_data.dart';
@@ -62,7 +63,12 @@ class _ExploreScreenState extends State<ExploreScreen> {
                 child: HeroArticleCard(
                   article: heroArticle,
                   onTap: () {
-                    debugPrint('Hero article tapped');
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ArticleDetailScreen(article: heroArticle),
+                      ),
+                    );
                   },
                 ),
               ),
@@ -71,7 +77,12 @@ class _ExploreScreenState extends State<ExploreScreen> {
               ...remainingArticles.map((article) => ArticleCardVerticalWidget(
                 article: article,
                 onTap: () {
-                  debugPrint('Article tapped: ${article.title}');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ArticleDetailScreen(article: article),
+                    ),
+                  );
                 },
               )),
             ],
