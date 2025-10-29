@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:news_app_demo_flutter/features/bookmark/bookmark_screen.dart';
 import 'package:news_app_demo_flutter/features/explore/ui/explore_screen.dart';
 import 'package:news_app_demo_flutter/features/home/ui/home_screen.dart';
+import 'package:news_app_demo_flutter/features/more/ui/more_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -16,8 +18,8 @@ class _MainScreenState extends State<MainScreen> {
   final List<Widget> _screens = [
     HomeScreen(),
     ExploreScreen(),
-    const Text("Bookmark"),
-    const Text("More"),
+    BookmarkScreen(),
+    MoreScreen(),
   ];
 
   void _onItemTapped(int index) {
