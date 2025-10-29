@@ -12,9 +12,13 @@ class NewsAppTheme {
 
   /// Light Theme
   static ThemeData lightTheme = ThemeData(
+    colorScheme: ColorScheme.light(
+      surface: Colors.white, // Background for surfaces
+      surfaceContainerLowest: Colors.white, // Card backgrounds
+      surfaceContainerLow: Colors.white, // Container backgrounds
+    ),
     useMaterial3: true,
     fontFamily: 'Poppins',
-    brightness: Brightness.light,
     primaryColor: AppColors.primary,
     textTheme: MyTextTheme.lightTextTheme,
     chipTheme: MyChipTheme.lightChipTheme,
@@ -25,9 +29,13 @@ class NewsAppTheme {
 
   /// Dark Theme
   static ThemeData darkTheme = ThemeData(
+    colorScheme: ColorScheme.light(
+      surface: Colors.white, // Background for surfaces
+      surfaceContainerLowest: Colors.white, // Card backgrounds
+      surfaceContainerLow: Colors.white, // Container backgrounds
+    ),
     useMaterial3: true,
     fontFamily: 'Poppins',
-    brightness: Brightness.dark,
     primaryColor: AppColors.primary,
     textTheme: MyTextTheme.darkTextTheme,
     chipTheme: MyChipTheme.darkChipTheme,

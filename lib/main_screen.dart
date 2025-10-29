@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:news_app_demo_flutter/features/home/ui/home_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -12,7 +13,7 @@ class _MainScreenState extends State<MainScreen> {
 
   // List of screens corresponding to the navigation bar items
   final List<Widget> _screens = [
-    const Text("Home"),
+    HomeScreen(),
     const Text("Explore"),
     const Text("Bookmark"),
     const Text("More"),
@@ -28,7 +29,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       // Display the current screen based on the selected index
-      body: _screens[_currentIndex],
+      body: SingleChildScrollView(child: SafeArea(child: _screens[_currentIndex])),
 
       // Bottom Navigation Bar implementation
       bottomNavigationBar: BottomNavigationBar(
