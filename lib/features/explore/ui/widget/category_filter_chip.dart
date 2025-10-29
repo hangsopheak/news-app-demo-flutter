@@ -35,17 +35,15 @@ class CategoryFilterChips extends StatelessWidget {
               selected: isSelected,
               label: Text(
                 category.name,
-                style: Theme.of(context).textTheme.bodyMedium,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: isSelected ? Theme.of(context).colorScheme.onPrimary : Theme.of(context).colorScheme.onSurface,
+                ),
               ),
               onSelected: (_) => onCategorySelected(category.id),
+              backgroundColor: Theme.of(context).colorScheme.surfaceContainerLow,
               selectedColor: Theme.of(context).colorScheme.primary,
-              labelStyle: TextStyle(
-                color: isSelected
-                    ? Theme.of(context).colorScheme.surface
-                    : null,
-
-              ),
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              showCheckmark: false,
             ),
           );
         },
