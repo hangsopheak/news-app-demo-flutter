@@ -10,12 +10,14 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ArticleSectionWidget(articles: HomeData.breakingArticles, title: 'Breaking News'),
-        ArticleSectionWidget(articles: HomeData.latestArticles, title: 'Latest News'),
-        ArticleSectionWidget(articles: HomeData.featuredArticles, title: 'Featured News'),
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          ArticleSectionWidget(articles: HomeData.breakingArticles, title: 'Breaking News'),
+          ArticleSectionWidget(articles: HomeData.latestArticles, title: 'Latest News'),
+          ArticleSectionWidget(articles: HomeData.featuredArticles, title: 'Featured News'),
+        ],
+      ),
     );
   }
 }
