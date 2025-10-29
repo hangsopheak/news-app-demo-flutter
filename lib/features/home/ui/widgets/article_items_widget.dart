@@ -3,6 +3,7 @@ import 'package:flutter/widget_previews.dart';
 import 'package:news_app_demo_flutter/features/article/ui/article_detail_screen.dart';
 import 'package:news_app_demo_flutter/features/home/data/local/home_data.dart';
 import 'package:news_app_demo_flutter/features/home/ui/widgets/article_card_widget.dart';
+import 'package:news_app_demo_flutter/routes/app_routes.dart';
 import 'package:news_app_demo_flutter/shared/domain/model/article.dart';
 import 'package:news_app_demo_flutter/shared/theme/theme.dart';
 
@@ -28,11 +29,11 @@ class ArticleItemsWidget extends StatelessWidget {
               right: index < articles.length - 1 ? 12 : 0,
             ),
             child: ArticleCardWidget(article: articles[index], onTap: () {
-              Navigator.push(
+              // Use name route
+              Navigator.pushNamed(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => ArticleDetailScreen(article: articles[index]),
-                ),
+                AppRoutes.articleDetail,
+                arguments: articles[index],
               );
             }),
           );
