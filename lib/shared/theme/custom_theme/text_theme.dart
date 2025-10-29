@@ -16,8 +16,8 @@ class MyTextTheme {
       color: Colors.black,
     ),
     headlineSmall: TextStyle(
-      fontSize: 18.0,
-      fontWeight: FontWeight.w600,
+      fontSize: 16.0,
+      fontWeight: FontWeight.w700,
       color: Colors.black,
     ),
 
