@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:news_app_demo_flutter/features/auth/ui/login_screen.dart';
+import 'package:news_app_demo_flutter/features/auth/ui/notifier/auth_notifier.dart';
 
-class MoreScreen extends StatelessWidget {
+class MoreScreen extends ConsumerWidget {
   const MoreScreen({super.key});
 
   void _onOfflineReadingClick(BuildContext context) {
@@ -38,8 +41,32 @@ class MoreScreen extends StatelessWidget {
     // TODO: Navigate to terms screen
   }
 
+  Future<void> _onSignOutClick(BuildContext context, WidgetRef ref) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Sign out'),
+        content: const Text('Are you sure you want to sign out?'),
+        actions: [
+          TextButton(onPressed: () => Navigator.of(context).pop(false), child: const Text('Cancel')),
+          TextButton(onPressed: () => Navigator.of(context).pop(true), child: const Text('Sign out')),
+        ],
+      ),
+    );
+
+    if (confirmed == true) {
+      // Call the notifier to perform sign out
+      await ref.read(authNotifierProvider.notifier).logout();
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (_) => const LoginScreen()),
+            (route) => false,
+      );
+     
+    }
+  }
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return ListView(
       children: [
         // Section: Reading Preferences
@@ -84,6 +111,13 @@ class MoreScreen extends StatelessWidget {
           title: const Text('Terms & Conditions'),
           trailing: const Icon(Icons.chevron_right),
           onTap: () => _onTermsClick(context),
+        ),
+
+        // Sign out
+        ListTile(
+          title: const Text('Sign out'),
+          trailing: const Icon(Icons.logout),
+          onTap: () => _onSignOutClick(context, ref),
         ),
 
         // App Version
