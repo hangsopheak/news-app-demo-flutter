@@ -5,6 +5,8 @@ import 'package:news_app_demo_flutter/features/explore/ui/explore_screen.dart';
 import 'package:news_app_demo_flutter/features/home/ui/home_screen.dart';
 import 'package:news_app_demo_flutter/features/more/ui/more_screen.dart';
 
+import 'l10n/app_localizations.dart';
+
 class MainScreen extends ConsumerStatefulWidget {
   const MainScreen({super.key});
 
@@ -42,26 +44,26 @@ class _MainScreenState extends ConsumerState<MainScreen> {
         unselectedItemColor: Colors.grey,
         currentIndex: _currentIndex,
         onTap: _onItemTapped,
-        items: const <BottomNavigationBarItem>[
+        items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined),
-            activeIcon: Icon(Icons.home),
-            label: 'Home',
+            icon: const Icon(Icons.home_outlined),
+            activeIcon: const Icon(Icons.home),
+            label: AppLocalizations.of(context)!.home,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.explore_outlined),
             activeIcon: Icon(Icons.explore),
-            label: 'Explore',
+            label: AppLocalizations.of(context)!.explore,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.bookmark_border),
             activeIcon: Icon(Icons.bookmark),
-            label: 'Bookmark',
+            label: AppLocalizations.of(context)!.bookmarks,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.more_horiz),
             activeIcon: Icon(Icons.more_horiz),
-            label: 'More',
+            label: AppLocalizations.of(context)!.more,
           ),
         ],
       ),

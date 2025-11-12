@@ -9,7 +9,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  intl: ^0.19.0
+  # run command flutter gen-l10n
+  intl: 0.20.2
+  flutter_localizations: # <--- Make sure this is here!
+    sdk: flutter
   cupertino_icons: ^1.0.2
   shared_preferences: ^2.2.3
   cached_network_image: ^3.3.1
@@ -21,9 +24,17 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^5.0.0
+  flutter_lints: ^6.0.0
 
 flutter:
   uses-material-design: true
+  generate: true
   assets:
     - assets/images/
+    - lib/l10n/
+  fonts:
+    - family: Noto Sans Khmer
+      fonts:
+        - asset: assets/fonts/NotoSansKhmer-Regular.ttf
+        - asset: assets/fonts/NotoSansKhmer-Bold.ttf
+          weight: 700

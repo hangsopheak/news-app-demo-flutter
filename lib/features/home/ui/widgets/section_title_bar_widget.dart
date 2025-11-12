@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widget_previews.dart';
+import 'package:news_app_demo_flutter/l10n/app_localizations.dart';
 
 class SectionTitleBarWidget extends StatelessWidget {
   const SectionTitleBarWidget({super.key, required this.title, this.onSeeMoreClicked});
@@ -29,7 +30,7 @@ class SectionTitleBarWidget extends StatelessWidget {
             GestureDetector(
               onTap: onSeeMoreClicked,
               child: Text(
-                'See More',
+                AppLocalizations.of(context)!.see_more,
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   color: Theme.of(context).colorScheme.primary
                 ),

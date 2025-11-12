@@ -2,20 +2,22 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:news_app_demo_flutter/features/onboarding/ui/onboarding_screen.dart';
 import 'package:news_app_demo_flutter/features/onboarding/utils/onboarding_util.dart';
 import 'package:news_app_demo_flutter/main_screen.dart';
 import 'package:news_app_demo_flutter/routes/app_routes.dart';
 import 'package:news_app_demo_flutter/shared/domain/model/article.dart';
+import 'package:news_app_demo_flutter/shared/providers/app_setting_provider.dart';
 import 'package:news_app_demo_flutter/shared/theme/theme.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'features/article/ui/article_detail_screen.dart';
 import 'features/auth/ui/notifier/auth_notifier.dart';
 import 'features/auth/ui/login_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
-
-import 'features/auth/ui/state/auth_ui_state.dart';
+import 'l10n/app_localizations.dart';
 
 
 /*
@@ -26,7 +28,7 @@ npm install -g firebase-tools
 # Install FlutterFire CLI
 dart pub global activate flutterfire_cli
 
-# login
+# loginÍ
 firebase login
 
 # Configure Firebase (auto-setup)
@@ -37,8 +39,12 @@ flutterfire configure --project=news-flutter-app-f2a2a
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  final sharedPreferences = await SharedPreferences.getInstance();
   runApp(
-    const ProviderScope(
+     ProviderScope(
+      overrides: [
+        sharedPreferencesProvider.overrideWithValue(sharedPreferences),
+      ],
       child: MainApp(),
     ),
   );
@@ -51,7 +57,15 @@ class MainApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
-      themeMode: ThemeMode.system,
+      localizationsDelegates: [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      supportedLocales: AppLocalizations.supportedLocales,
+      locale: ref.watch(languageProvider), // reactive with Riverpod
+      themeMode: ref.watch(themeModeProvider),
       theme: NewsAppTheme.lightTheme,
       darkTheme: NewsAppTheme.darkTheme,
       onGenerateRoute: (settings) {

@@ -1,0 +1,22 @@
+{
+  "home" : "Home",
+  "explore" : "Explore",
+  "bookmarks" : "Bookmarks",
+  "more" : "More",
+  "breaking_news" : "Breaking News",
+  "latest_news" : "Latest News",
+  "feature_news" : "Featured News",
+  "see_more" : "See More",
+  "read_perference": "Read Preference",
+  "offline_reading" : "Offline Reading",
+  "read_articles": "Read Articles",
+  "settings": "App Settings",
+  "notification": "Notifications",
+  "appearance": "Appearance",
+  "language": "Language",
+  "about": "About",
+  "about_us": "About Us",
+  "privacy_policy": "Privacy Policy",
+  "terms": "Terms & Conditions",
+  "signout": "Sign Out"
+}
