@@ -84,4 +84,36 @@ class Article {
       'isBookMarked': isBookMarked,
     };
   }
+
+  // 4. copyWith method
+  Article copyWith({
+    int? id,
+    int? categoryId,
+    String? title,
+    String? content,
+    String? imageUrl,
+    String? author,
+    DateTime? publishedAt,
+    Category? category,
+    bool? isBreaking,
+    bool? isFeatured,
+    bool? isLatest,
+    bool? isBookMarked,
+  }) {
+    return Article(
+      id: id ?? this.id,
+      categoryId: categoryId ?? this.categoryId,
+      title: title ?? this.title,
+      content: content ?? this.content,
+      imageUrl: imageUrl ?? this.imageUrl,
+      author: author ?? this.author,
+      publishedAt: publishedAt ?? this.publishedAt,
+      category: category ?? this.category,
+      isBreaking: isBreaking ?? this.isBreaking,
+      isFeatured: isFeatured ?? this.isFeatured,
+      isLatest: isLatest ?? this.isLatest,
+      isBookMarked: isBookMarked ?? this.isBookMarked,
+    );
+  }
+
 }
