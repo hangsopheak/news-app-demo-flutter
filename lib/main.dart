@@ -2,6 +2,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:news_app_demo_flutter/features/onboarding/ui/onboarding_screen.dart';
@@ -38,6 +39,8 @@ flutterfire configure --project=news-flutter-app-f2a2a
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // Load environment variables from .env file
+  await dotenv.load(fileName: ".env");
   await Firebase.initializeApp();
   final sharedPreferences = await SharedPreferences.getInstance();
   runApp(

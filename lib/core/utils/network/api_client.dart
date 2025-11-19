@@ -11,7 +11,7 @@ class ApiClient {
   Map<String, String> get _headers => {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
-    'X-DB-NAME': dotenv.env['DB-NAME'] ?? ''
+    'X-DB-NAME': dotenv.env['DB_NAME'] ?? ''
   };
 
   // GET request
