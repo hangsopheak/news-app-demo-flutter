@@ -121,3 +121,17 @@ app.*.symbols
 !.env.example
 
 /.env
+
+# Ignore JetBrains IDE configuration files (like those in .idea)
+.idea/
+
+# Ignore specific build/temp files
+devtools_options.yaml
+
+# Ignore the specific files you selected, though the .idea/ line covers most
+copilot.data.migration.agent.xml.idea
+copilot.data.migration.ask.xml.idea
+copilot.data.migration.ask2agent.xml.idea
+copilot.data.migration.edit.xml.idea
+Dart_Packages.xml.idea/libraries
+deviceStreaming.xml.idea/caches
