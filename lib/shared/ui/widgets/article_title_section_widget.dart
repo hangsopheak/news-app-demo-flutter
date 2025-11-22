@@ -74,7 +74,7 @@ class ArticleTitleSectionWidget extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      article.publishedAt.toArticleStyle().toString(),
+                      article.publishedAt.toArticleDate().toString(),
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: theme.colorScheme.onSurface,
                       ),

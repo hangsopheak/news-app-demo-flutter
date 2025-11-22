@@ -1,25 +1,25 @@
 import 'package:news_app_demo_flutter/shared/domain/model/article.dart';
 
-class ArticleDetailUiState {
+class BookmarkUiState {
   final bool isLoading;
   final String? error;
-  final Article? article;
+  final List<Article> articles;
 
-  const ArticleDetailUiState({
+  const BookmarkUiState({
     this.isLoading = false,
     this.error,
-    this.article,
+    this.articles = const [],
   });
 
-  ArticleDetailUiState copyWith({
+  BookmarkUiState copyWith({
     bool? isLoading,
     String? error,
-    Article? article,
+    List<Article>? articles,
   }) {
-    return ArticleDetailUiState(
+    return BookmarkUiState(
       isLoading: isLoading ?? this.isLoading,
       error: error,
-      article: article ?? this.article,
+      articles: articles ?? this.articles,
     );
   }
 }

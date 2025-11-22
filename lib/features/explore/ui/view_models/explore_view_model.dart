@@ -2,7 +2,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:news_app_demo_flutter/providers.dart';
 import 'explore_ui_state.dart';
 
-/// ViewModel for Explore Screen (MVVM pattern)
 class ExploreViewModel extends Notifier<ExploreUiState> {
   @override
   ExploreUiState build() {
@@ -29,9 +28,9 @@ class ExploreViewModel extends Notifier<ExploreUiState> {
         ),
       );
 
-      // Auto-load articles for first category if available
-      if (categories.isNotEmpty && state.categoriesState.selectedCategoryId == null) {
-        await selectCategory(categories.first.id);
+      // Auto-load all articles initially (no filter)
+      if (categories.isNotEmpty) {
+        await loadArticles(null);
       }
     } catch (e) {
       state = state.copyWith(
@@ -44,8 +43,8 @@ class ExploreViewModel extends Notifier<ExploreUiState> {
   }
 
   /// Select a category and load its articles
-  Future<void> selectCategory(int categoryId) async {
-    // Update selected category
+  /// If categoryId is null, load all articles
+  Future<void> loadArticles(int? categoryId) async {
     state = state.copyWith(
       categoriesState: state.categoriesState.copyWith(
         selectedCategoryId: categoryId,
@@ -58,7 +57,9 @@ class ExploreViewModel extends Notifier<ExploreUiState> {
 
     try {
       final repository = ref.read(articleRepositoryProvider);
-      final articles = await repository.getArticlesByCategory(categoryId);
+      final articles = categoryId == null
+          ? await repository.getArticles()
+          : await repository.getArticlesByCategory(categoryId);
 
       state = state.copyWith(
         articlesState: state.articlesState.copyWith(
@@ -75,39 +76,6 @@ class ExploreViewModel extends Notifier<ExploreUiState> {
       );
     }
   }
-
-  /// Load all articles (no category filter)
-  Future<void> loadAllArticles() async {
-    state = state.copyWith(
-      categoriesState: state.categoriesState.copyWith(
-        selectedCategoryId: null,
-      ),
-      articlesState: state.articlesState.copyWith(
-        isLoading: true,
-        error: null,
-      ),
-    );
-
-    try {
-      final repository = ref.read(articleRepositoryProvider);
-      final articles = await repository.getArticles();
-
-      state = state.copyWith(
-        articlesState: state.articlesState.copyWith(
-          isLoading: false,
-          articles: articles,
-        ),
-      );
-    } catch (e) {
-      state = state.copyWith(
-        articlesState: state.articlesState.copyWith(
-          isLoading: false,
-          error: e.toString(),
-        ),
-      );
-    }
-  }
-
 }
 
 /// Provider for ExploreViewModel

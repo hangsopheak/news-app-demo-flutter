@@ -30,7 +30,7 @@ class ArticleByFlagViewModel extends Notifier<ArticleByFlagUiState> {
         case 3:
           articles = await repository.getBreakingNews();
           break;
-        case 3:
+        case 4:
           articles = await repository.getBookmarkedArticles();
           break;
         default:

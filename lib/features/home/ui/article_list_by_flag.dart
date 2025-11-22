@@ -6,7 +6,7 @@ import 'package:news_app_demo_flutter/shared/data/local/article_data.dart';
 import 'package:news_app_demo_flutter/shared/domain/model/article.dart';
 import 'package:news_app_demo_flutter/shared/ui/widgets/article_card_vertical_widget.dart';
 
-class ArticleListByFlagScreen extends ConsumerWidget {
+class ArticleListByFlagScreen extends ConsumerStatefulWidget {
   final int articleFlagId;
   final String flagDescription;
 
@@ -15,6 +15,20 @@ class ArticleListByFlagScreen extends ConsumerWidget {
     required this.articleFlagId,
     required this.flagDescription,
   });
+
+  @override
+  ConsumerState<ArticleListByFlagScreen> createState() => _ArticleListByFlagScreenState();
+}
+
+class _ArticleListByFlagScreenState extends ConsumerState<ArticleListByFlagScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Load articles after the widget tree is built
+    Future.microtask(() {
+      ref.read(articleByFlagViewModelProvider.notifier).loadArticlesByFlag(widget.articleFlagId);
+    });
+  }
 
   void _onArticleTap(BuildContext context, Article article) {
     Navigator.push(
@@ -26,24 +40,25 @@ class ArticleListByFlagScreen extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    
+  Widget build(BuildContext context) {
     final articleByFlagViewModel = ref.watch(articleByFlagViewModelProvider);
-    ref.read(articleByFlagViewModelProvider.notifier).loadArticlesByFlag(articleFlagId);
+
     return RefreshIndicator(
-      onRefresh: () => ref.read(articleByFlagViewModelProvider.notifier).loadArticlesByFlag(articleFlagId),
+      onRefresh: () => ref.read(articleByFlagViewModelProvider.notifier).loadArticlesByFlag(widget.articleFlagId),
       child: Scaffold(
         appBar: AppBar(
-          title: Text(flagDescription),
+          title: Text(widget.flagDescription),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () => Navigator.pop(context),
           ),
         ),
-        body: articleByFlagViewModel.articles.isEmpty
-            ? const Center(
-          child: Text('No articles found'),
-        )
+        body: articleByFlagViewModel.isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : articleByFlagViewModel.error != null
+            ? Center(child: Text('Error: ${articleByFlagViewModel.error}'))
+            : articleByFlagViewModel.articles.isEmpty
+            ? const Center(child: Text('No articles found'))
             : ListView.separated(
           padding: const EdgeInsets.all(8),
           itemCount: articleByFlagViewModel.articles.length,
@@ -59,3 +74,4 @@ class ArticleListByFlagScreen extends ConsumerWidget {
     );
   }
 }
+
