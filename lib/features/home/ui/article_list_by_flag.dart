@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:news_app_demo_flutter/features/article/ui/article_detail_screen.dart';
 import 'package:news_app_demo_flutter/features/home/ui/view_models/article_list_by_flag_view_model.dart';
-import 'package:news_app_demo_flutter/shared/data/local/article_data.dart';
 import 'package:news_app_demo_flutter/shared/domain/model/article.dart';
 import 'package:news_app_demo_flutter/shared/ui/widgets/article_card_vertical_widget.dart';
 

@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:news_app_demo_flutter/core/utils/date_format_util.dart';
 import 'package:news_app_demo_flutter/core/utils/image_url_helper.dart';
 import 'package:news_app_demo_flutter/shared/domain/model/article.dart';

@@ -5,14 +5,13 @@ import 'category.dart';
 
 part 'article.g.dart';
 // flutter pub run build_runner build --delete-conflicting-outputs
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class Article {
   final int id;
   final int categoryId;
   final String title;
   final String content;
   final String imageUrl;
-  @JsonKey(name: 'authors')
   final String? author;
   final DateTime publishedAt;
   final Category category;

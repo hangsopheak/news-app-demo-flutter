@@ -9,14 +9,12 @@ import 'package:news_app_demo_flutter/shared/ui/widgets/article_title_section_wi
 class ArticleCardVerticalWidget extends StatelessWidget {
   final Article article;
   final VoidCallback? onTap;
-  final VoidCallback? onBookmarkTap;
   final VoidCallback? onShareTap;
 
   const ArticleCardVerticalWidget({
     super.key,
     required this.article,
     this.onTap,
-    this.onBookmarkTap,
     this.onShareTap,
   });
 
@@ -39,7 +37,6 @@ class ArticleCardVerticalWidget extends StatelessWidget {
                     article: article,
                     titleFontSize: 16,
                     showBookMark: false,
-                    onBookmarkTap: onBookmarkTap,
                     onShareTap: onShareTap,
                   ),
                 ),
@@ -89,9 +86,6 @@ Widget ArticleCardVerticalPreview() {
             article: ArticleData.allArticles[2],
             onTap: () {
               debugPrint('Article tapped');
-            },
-            onBookmarkTap: () {
-              debugPrint('Bookmark tapped');
             },
             onShareTap: () {
               debugPrint('Share tapped');

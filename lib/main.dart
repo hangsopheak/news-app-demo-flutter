@@ -1,6 +1,3 @@
-
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -8,7 +5,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:news_app_demo_flutter/features/onboarding/ui/onboarding_screen.dart';
 import 'package:news_app_demo_flutter/features/onboarding/utils/onboarding_util.dart';
 import 'package:news_app_demo_flutter/main_screen.dart';
+import 'package:news_app_demo_flutter/providers.dart';
 import 'package:news_app_demo_flutter/routes/app_routes.dart';
+import 'package:news_app_demo_flutter/shared/data/local/bookmark_service.dart';
 import 'package:news_app_demo_flutter/shared/domain/model/article.dart';
 import 'package:news_app_demo_flutter/shared/providers/app_setting_provider.dart';
 import 'package:news_app_demo_flutter/shared/theme/theme.dart';
@@ -42,11 +41,17 @@ Future<void> main() async {
   // Load environment variables from .env file
   await dotenv.load(fileName: ".env");
   await Firebase.initializeApp();
+
+  // Initialize BookmarkService BEFORE creating providers
+  final bookmarkService = BookmarkService();
+  await bookmarkService.init();
+
   final sharedPreferences = await SharedPreferences.getInstance();
   runApp(
      ProviderScope(
       overrides: [
         sharedPreferencesProvider.overrideWithValue(sharedPreferences),
+        bookmarkServiceProvider.overrideWithValue(bookmarkService),
       ],
       child: MainApp(),
     ),

@@ -1,15 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widget_previews.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:news_app_demo_flutter/core/utils/date_format_util.dart';
+import 'package:news_app_demo_flutter/providers.dart';
 import 'package:news_app_demo_flutter/shared/data/local/article_data.dart';
 import 'package:news_app_demo_flutter/shared/domain/model/article.dart';
 import 'package:news_app_demo_flutter/shared/theme/theme.dart';
 
-class ArticleTitleSectionWidget extends StatelessWidget {
+/// Watch real-time bookmark status for an article
+final isArticleBookmarkedProvider =
+StreamProvider.family<bool, int>((ref, articleId) {
+  final repo = ref.watch(articleRepositoryProvider);
+  return repo.watchArticleBookmarkStatus(articleId);
+});
+
+/// Simple provider that exposes the toggle function
+final toggleBookmarkProvider = Provider((ref) {
+  final repo = ref.read(articleRepositoryProvider);
+  return repo.toggleBookmark;
+});
+
+
+class ArticleTitleSectionWidget extends ConsumerWidget {
   final Article article;
   final double titleFontSize;
   final bool showBookMark;
-  final VoidCallback? onBookmarkTap;
   final VoidCallback? onShareTap;
 
   const ArticleTitleSectionWidget({
@@ -17,17 +32,41 @@ class ArticleTitleSectionWidget extends StatelessWidget {
     required this.article,
     this.titleFontSize = 20,
     this.showBookMark = true,
-    this.onBookmarkTap,
     this.onShareTap,
   });
 
+  Future<void> _handleBookmarkToggle(BuildContext context, WidgetRef ref) async {
+    final toggle = ref.read(toggleBookmarkProvider);
+
+    try {
+      await toggle(article); // Perform toggle
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text('Failed to update bookmark'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
+
+    // Watch bookmark status stream
+    final bookmarkStatus =
+    ref.watch(isArticleBookmarkedProvider(article.id));
+
+    final isBookmarked = bookmarkStatus.value ?? false;
+    final isLoading = false;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // Title
         Padding(
           padding: const EdgeInsets.only(bottom: 4),
           child: Text(
@@ -39,28 +78,25 @@ class ArticleTitleSectionWidget extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
           ),
         ),
+
+        // Author + Actions
         Padding(
-          padding: const EdgeInsets.only(top: 4, bottom: 4),
+          padding: const EdgeInsets.symmetric(vertical: 4),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              // Avatar
               ClipOval(
                 child: Image.asset(
                   'assets/images/author.jpeg',
                   width: 30,
                   height: 30,
                   fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) {
-                    return Container(
-                      width: 30,
-                      height: 30,
-                      color: Colors.grey[300],
-                      child: const Icon(Icons.person, size: 16),
-                    );
-                  },
                 ),
               ),
               const SizedBox(width: 8),
+
+              // Author + Date
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -69,32 +105,35 @@ class ArticleTitleSectionWidget extends StatelessWidget {
                       article.author ?? 'Unknown',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.onSurface,
-                      ),
+                      style: theme.textTheme.bodySmall,
                     ),
                     Text(
                       article.publishedAt.toArticleDate().toString(),
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.onSurface,
-                      ),
+                      style: theme.textTheme.bodySmall,
                     ),
                   ],
                 ),
               ),
+
+              // Bookmark + Share
               if (showBookMark) ...[
+                // Bookmark Button
                 IconButton(
-                  onPressed: onBookmarkTap,
+                  onPressed: isLoading
+                      ? null
+                      : () => _handleBookmarkToggle(context, ref),
                   icon: Icon(
-                    article.isBookMarked ? Icons.bookmark : Icons.bookmark_border,
+                    isBookmarked ? Icons.bookmark : Icons.bookmark_border,
                     size: 20,
-                    color: article.isBookMarked
+                    color: isBookmarked
                         ? theme.colorScheme.primary
                         : theme.colorScheme.onSurface,
                   ),
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(),
                 ),
+
+                // Share Button
                 IconButton(
                   onPressed: onShareTap,
                   icon: Icon(
@@ -105,7 +144,7 @@ class ArticleTitleSectionWidget extends StatelessWidget {
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(),
                 ),
-              ],
+              ]
             ],
           ),
         ),
@@ -113,6 +152,7 @@ class ArticleTitleSectionWidget extends StatelessWidget {
     );
   }
 }
+
 
 // Preview
 @Preview(name: 'Article Title Section')
@@ -125,9 +165,6 @@ Widget ArticleTitleSectionPreview() {
           padding: const EdgeInsets.all(16),
           child: ArticleTitleSectionWidget(
             article: ArticleData.allArticles[1],
-            onBookmarkTap: () {
-              debugPrint('Bookmark tapped');
-            },
             onShareTap: () {
               debugPrint('Share tapped');
             },

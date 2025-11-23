@@ -1,5 +1,6 @@
 
 
+import 'package:news_app_demo_flutter/shared/data/local/bookmark_service.dart';
 import 'package:news_app_demo_flutter/shared/data/remote/article_service.dart';
 import 'package:news_app_demo_flutter/shared/domain/model/article.dart';
 
@@ -7,9 +8,13 @@ import 'package:news_app_demo_flutter/shared/domain/model/article.dart';
 /// Provides clean API and error handling for article data
 class ArticleRepository {
   final ArticleService _articleService;
+  final BookmarkService _bookmarkService;
 
-  ArticleRepository({ArticleService? articleService})
-      : _articleService = articleService ?? ArticleService();
+  ArticleRepository({
+    ArticleService? articleService,
+    required BookmarkService bookmarkService,
+  })  : _articleService = articleService ?? ArticleService(),
+        _bookmarkService = bookmarkService;
 
   /// Get articles with optional filters
   Future<List<Article>> getArticles({
@@ -73,15 +78,7 @@ class ArticleRepository {
     }
   }
 
-  /// Get bookmarked articles
-  Future<List<Article>> getBookmarkedArticles() async {
-    try {
-      return await _articleService.getBookmarkedArticles();
-    } catch (e) {
-      print('ArticleRepository.getBookmarkedArticles Error: $e');
-      throw Exception('Failed to fetch bookmarked articles: $e');
-    }
-  }
+
 
   /// Get articles by category
   Future<List<Article>> getArticlesByCategory(int categoryId) async {
@@ -93,43 +90,32 @@ class ArticleRepository {
     }
   }
 
-  /// Create new article
-  Future<Article> createArticle(Article article) async {
-    try {
-      return await _articleService.createArticle(article);
-    } catch (e) {
-      print('ArticleRepository.createArticle Error: $e');
-      throw Exception('Failed to create article: $e');
-    }
-  }
-
-  /// Update existing article
-  Future<Article> updateArticle(int id, Article article) async {
-    try {
-      return await _articleService.updateArticle(id, article);
-    } catch (e) {
-      print('ArticleRepository.updateArticle Error: $e');
-      throw Exception('Failed to update article: $e');
-    }
-  }
-
-  /// Delete article
-  Future<void> deleteArticle(int id) async {
-    try {
-      await _articleService.deleteArticle(id);
-    } catch (e) {
-      print('ArticleRepository.deleteArticle Error: $e');
-      throw Exception('Failed to delete article: $e');
-    }
-  }
-
   /// Toggle bookmark status
-  Future<Article> toggleBookmark(Article article) async {
+  Future<void> toggleBookmark(Article article) async {
     try {
-      return await _articleService.toggleBookmark(article);
+      return await _bookmarkService.toggleBookmark(article);
     } catch (e) {
       print('ArticleRepository.toggleBookmark Error: $e');
       throw Exception('Failed to toggle bookmark: $e');
     }
   }
+  /// Get bookmarked articles
+  Future<List<Article>> getBookmarkedArticles() async {
+    try {
+      return await _bookmarkService.getAllBookmarks();
+    } catch (e) {
+      print('ArticleRepository.getBookmarkedArticles Error: $e');
+      throw Exception('Failed to fetch bookmarked articles: $e');
+    }
+  }
+
+  /// Check if article is bookmarked (local storage)
+  /// Future = one-time fetch
+  // Stream = continuous updates
+  // Bookmark status is something that can change, so stream fits perfectly
+  Stream<bool> watchArticleBookmarkStatus(int articleId) {
+    return _bookmarkService.watchArticleBookmarkStatus(articleId);
+  }
+
+
 }

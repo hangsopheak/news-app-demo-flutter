@@ -76,11 +76,6 @@ class ArticleService {
     return getArticles(isBreaking: true);
   }
 
-  /// Get bookmarked articles
-  Future<List<Article>> getBookmarkedArticles() async {
-    return getArticles(isBookmarked: true);
-  }
-
   /// Get articles by category
   Future<List<Article>> getArticlesByCategory(int categoryId) async {
     return getArticles(categoryId: categoryId);
@@ -122,13 +117,5 @@ class ArticleService {
       print('ArticleService.deleteArticle Error: $e');
       rethrow;
     }
-  }
-
-  /// Toggle bookmark status
-  Future<Article> toggleBookmark(Article article) async {
-    final updatedArticle = article.copyWith(
-      isBookMarked: !article.isBookMarked,
-    );
-    return updateArticle(article.id, updatedArticle);
   }
 }

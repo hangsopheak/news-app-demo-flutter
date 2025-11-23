@@ -21,26 +21,24 @@ class _BookmarkScreenState extends ConsumerState<BookmarkScreen> {
     });
   }
 
-  void _onArticleTap(BuildContext context, Article article) {
-    Navigator.push(
+  void _onArticleTap(BuildContext context, Article article) async {
+    await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => ArticleDetailScreen(article: article),
       ),
     );
+    // Reload after returning from detail screen
+    ref.read(bookmarkViewModelProvider.notifier).loadBookmarkArticles();
   }
 
   @override
   Widget build(BuildContext context) {
-    // MODIFIED: Watch the bookmark state from ViewModel
     final bookmarkState = ref.watch(bookmarkViewModelProvider);
-
-    // MODIFIED: Show loading indicator while fetching bookmarked articles
     if (bookmarkState.isLoading) {
       return const Center(child: CircularProgressIndicator());
     }
 
-    // MODIFIED: Show error message with retry button
     if (bookmarkState.error != null) {
       return Center(
         child: Column(

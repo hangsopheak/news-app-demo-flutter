@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:news_app_demo_flutter/shared/constants/app_colors.dart';
-import 'package:news_app_demo_flutter/shared/theme/custom_theme/appbar_theme.dart';
 
 /* -- Light & Dark Elevated Button Themes -- */
 class MyElevatedButtonTheme {
