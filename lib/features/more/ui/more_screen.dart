@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:news_app_demo_flutter/features/auth/ui/login_screen.dart';
 import 'package:news_app_demo_flutter/features/auth/ui/notifier/auth_notifier.dart';
+import 'package:news_app_demo_flutter/features/more/ui/platform_demo/camera_demo_screen.dart';
+import 'package:news_app_demo_flutter/features/more/ui/platform_demo/location_demo_screen.dart';
+import 'package:news_app_demo_flutter/features/more/ui/platform_demo/notification_demo_screen.dart';
+import 'package:news_app_demo_flutter/features/more/ui/platform_demo/os_status_demo_screen.dart';
 import 'package:news_app_demo_flutter/l10n/app_localizations.dart';
 import 'package:news_app_demo_flutter/shared/providers/app_setting_provider.dart';
 
@@ -68,6 +72,40 @@ class MoreScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return ListView(
       children: [
+
+        // Section: Platform Integration Demos
+        PreferenceSectionTitle('Platform Integration Demos'),
+        ListTile(
+          leading: const Icon(Icons.phone_android),
+          title: const Text('OS Status Demo'),
+          subtitle: const Text('Battery & Network monitoring'),
+          trailing: const Icon(Icons.chevron_right),
+          onTap: () => _onOSStatusDemoClick(context),
+        ),
+        ListTile(
+          leading: const Icon(Icons.camera_alt),
+          title: const Text('Camera Demo'),
+          subtitle: const Text('Camera & Photo access'),
+          trailing: const Icon(Icons.chevron_right),
+          onTap: () => _onCameraDemoClick(context),
+        ),
+        ListTile(
+          leading: const Icon(Icons.location_on),
+          title: const Text('Location Demo'),
+          subtitle: const Text('GPS & Maps integration'),
+          trailing: const Icon(Icons.chevron_right),
+          onTap: () => _onLocationDemoClick(context),
+        ),
+        ListTile(
+          leading: const Icon(Icons.notifications),
+          title: const Text('Notifications Demo'),
+          subtitle: const Text('Local & Push notifications'),
+          trailing: const Icon(Icons.chevron_right),
+          onTap: () => _onNotificationsDemoClick(context),
+        ),
+
+        const Divider(),
+
         // Section: Reading Preferences
         PreferenceSectionTitle(AppLocalizations.of(context)!.read_perference),
         ListTile(
@@ -185,6 +223,35 @@ class MoreScreen extends ConsumerWidget {
           ),
         ],
       ),
+    );
+  }
+
+  // Navigation methods for demo screens
+  void _onOSStatusDemoClick(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const OSStatusDemoScreen()),
+    );
+  }
+
+  void _onCameraDemoClick(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const CameraDemoScreen()),
+    );
+  }
+
+  void _onLocationDemoClick(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const LocationDemoScreen()),
+    );
+  }
+
+  void _onNotificationsDemoClick(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const NotificationsDemoScreen()),
     );
   }
 }
