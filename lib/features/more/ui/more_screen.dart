@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:news_app_demo_flutter/concept_demo/riverpod/riverpod_home_screen.dart';
 
 class MoreScreen extends StatelessWidget {
   const MoreScreen({super.key});
@@ -38,6 +39,14 @@ class MoreScreen extends StatelessWidget {
     // TODO: Navigate to terms screen
   }
 
+  void _onRiverpodDemoClick(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const RiverpodHomeScreen()),
+    );
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -53,6 +62,16 @@ class MoreScreen extends StatelessWidget {
           title: const Text('Read Articles'),
           trailing: const Icon(Icons.chevron_right),
           onTap: () => _onReadArticlesClick(context),
+        ),
+
+        // --- New Section for Demo Code ---
+        const PreferenceSectionTitle('Developer Tools'),
+        ListTile(
+          leading: const Icon(Icons.psychology_alt, color: Colors.deepOrange), // Eye-catching icon
+          title: const Text('Riverpod 3.0 Demo Concepts'),
+          subtitle: const Text('State management playground'),
+          trailing: const Icon(Icons.chevron_right),
+          onTap: () => _onRiverpodDemoClick(context), // Navigate to the demo screen
         ),
 
         // Section: App Settings
@@ -99,6 +118,7 @@ class MoreScreen extends StatelessWidget {
       ],
     );
   }
+
 }
 
 class PreferenceSectionTitle extends StatelessWidget {
