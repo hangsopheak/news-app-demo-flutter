@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:news_app_demo_flutter/features/onboarding/ui/onboarding_screen.dart';
 import 'package:news_app_demo_flutter/features/onboarding/utils/onboarding_util.dart';
 import 'package:news_app_demo_flutter/main_screen.dart';
@@ -9,7 +10,12 @@ import 'package:news_app_demo_flutter/shared/theme/theme.dart';
 import 'features/article/ui/article_detail_screen.dart';
 
 void main() {
-  runApp(const MainApp());
+  runApp(
+    // ProviderScope is required at the root of the app
+    const ProviderScope(
+      child: MainApp(),
+    ),
+  );
 }
 
 class MainApp extends StatelessWidget {
