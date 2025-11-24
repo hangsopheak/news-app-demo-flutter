@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'user_profile_notifier.dart';
+part of 'auth_notifier.dart';
 
 // **************************************************************************
 // RiverpodGenerator
@@ -9,45 +9,44 @@ part of 'user_profile_notifier.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
-@ProviderFor(UserProfileNotifier)
-const userProfileProvider = UserProfileNotifierProvider._();
+@ProviderFor(AuthNotifier)
+const authProvider = AuthNotifierProvider._();
 
-final class UserProfileNotifierProvider
-    extends $AsyncNotifierProvider<UserProfileNotifier, User> {
-  const UserProfileNotifierProvider._()
+final class AuthNotifierProvider
+    extends $StreamNotifierProvider<AuthNotifier, AuthUser?> {
+  const AuthNotifierProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'userProfileProvider',
+        name: r'authProvider',
         isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$userProfileNotifierHash();
+  String debugGetCreateSourceHash() => _$authNotifierHash();
 
   @$internal
   @override
-  UserProfileNotifier create() => UserProfileNotifier();
+  AuthNotifier create() => AuthNotifier();
 }
 
-String _$userProfileNotifierHash() =>
-    r'902eb2bc01382e40ec0b35049884c5184205d7d4';
+String _$authNotifierHash() => r'9162f5fe1eeee99437abb9079f430f535539f469';
 
-abstract class _$UserProfileNotifier extends $AsyncNotifier<User> {
-  FutureOr<User> build();
+abstract class _$AuthNotifier extends $StreamNotifier<AuthUser?> {
+  Stream<AuthUser?> build();
   @$mustCallSuper
   @override
   void runBuild() {
     final created = build();
-    final ref = this.ref as $Ref<AsyncValue<User>, User>;
+    final ref = this.ref as $Ref<AsyncValue<AuthUser?>, AuthUser?>;
     final element =
         ref.element
             as $ClassProviderElement<
-              AnyNotifier<AsyncValue<User>, User>,
-              AsyncValue<User>,
+              AnyNotifier<AsyncValue<AuthUser?>, AuthUser?>,
+              AsyncValue<AuthUser?>,
               Object?,
               Object?
             >;
