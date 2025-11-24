@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:news_app_demo_flutter/features/auth/ui/login_screen.dart';
 import 'package:news_app_demo_flutter/features/onboarding/data/onboarding_section_data.dart';
 import 'package:news_app_demo_flutter/features/onboarding/utils/onboarding_util.dart';
 import 'package:news_app_demo_flutter/main_screen.dart';
@@ -127,16 +128,22 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           alignment: Alignment.centerRight,
                           child: OnboardingButtonWidget(
                             text: rightButtonText,
-                            onPressed: () {
-                              if (_currentPage < lastPage) {
-                                _pageController.nextPage(
-                                    duration: const Duration(milliseconds: 300),
-                                    curve: Curves.ease);
-                              } else {
-                                OnboardingUtil.setOnboardingCompleted();
-                                _navigateToMainScreen();
+                              onPressed: () async {
+                                if (_currentPage < lastPage) {
+                                  _pageController.nextPage(
+                                      duration: const Duration(milliseconds: 300),
+                                      curve: Curves.ease);
+                                } else {
+                                  // await setting onboarding completed, then navigate to login
+                                  await OnboardingUtil.setOnboardingCompleted();
+
+                                  Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                      builder: (context) => const LoginScreen(),
+                                    ),
+                                  );
+                                }
                               }
-                            },
                           ),
                         ),
                       ),

@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:news_app_demo_flutter/features/bookmark/bookmark_screen.dart';
 import 'package:news_app_demo_flutter/features/explore/ui/explore_screen.dart';
 import 'package:news_app_demo_flutter/features/home/ui/home_screen.dart';
 import 'package:news_app_demo_flutter/features/more/ui/more_screen.dart';
 
-class MainScreen extends StatefulWidget {
+class MainScreen extends ConsumerStatefulWidget {
   const MainScreen({super.key});
 
   @override
-  State<MainScreen> createState() => _MainScreenState();
+  ConsumerState<MainScreen> createState() => _MainScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> {
+class _MainScreenState extends ConsumerState<MainScreen> {
   int _currentIndex = 0;
 
   // List of screens corresponding to the navigation bar items
