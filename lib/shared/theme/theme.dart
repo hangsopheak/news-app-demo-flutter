@@ -17,6 +17,7 @@ class NewsAppTheme {
     ),
     useMaterial3: true,
     fontFamily: 'Poppins',
+    fontFamilyFallback: const ['Noto Sans Khmer', 'Roboto'],
     primaryColor: AppColors.primary,
     textTheme: MyTextTheme.lightTextTheme,
     chipTheme: MyChipTheme.lightChipTheme,
@@ -27,13 +28,14 @@ class NewsAppTheme {
 
   /// Dark Theme
   static ThemeData darkTheme = ThemeData(
-    colorScheme: ColorScheme.light(
+    colorScheme: ColorScheme.dark(
       surface: Colors.black, // Background for surfaces
       surfaceContainerLowest: Colors.black, // Card backgrounds
       surfaceContainerLow: Colors.black, // Container backgrounds
     ),
     useMaterial3: true,
     fontFamily: 'Poppins',
+    fontFamilyFallback: const ['Noto Sans Khmer', 'Roboto'],
     primaryColor: AppColors.primary,
     textTheme: MyTextTheme.darkTextTheme,
     chipTheme: MyChipTheme.darkChipTheme,
