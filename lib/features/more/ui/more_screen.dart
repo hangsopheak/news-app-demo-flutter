@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:news_app_demo_flutter/concept_demo/riverpod/riverpod_home_screen.dart';
 import 'package:news_app_demo_flutter/features/auth/notifier/auth_notifier.dart';
 import 'package:news_app_demo_flutter/features/auth/ui/login_screen.dart';
+import 'package:news_app_demo_flutter/l10n/app_localizations.dart';
+import 'package:news_app_demo_flutter/shared/providers/preferences_providers.dart';
 
 class MoreScreen extends ConsumerWidget {
   const MoreScreen({super.key});
@@ -22,9 +24,54 @@ class MoreScreen extends ConsumerWidget {
     // TODO: Navigate to notifications settings
   }
 
-  void _onAppearanceClick(BuildContext context) {
-    debugPrint('Appearance clicked');
-    // TODO: Navigate to appearance settings
+  void _onAppearanceClick(BuildContext context, WidgetRef ref) {
+    showModalBottomSheet(
+      context: context,
+      builder: (_) => Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ListTile(
+            title: const Text('Light Mode'),
+            onTap: () {
+              ref.read(themeModeProvider.notifier).setMode(ThemeMode.light);
+              Navigator.pop(context);
+            },
+          ),
+          ListTile(
+            title: const Text('Dark Mode'),
+            onTap: () {
+              ref.read(themeModeProvider.notifier).setMode(ThemeMode.dark);
+              Navigator.pop(context);
+            },
+          )
+        ],
+      ),
+    );
+  }
+
+  void _onLanguageClick(BuildContext context, WidgetRef ref) {
+    showModalBottomSheet(
+      context: context,
+      builder: (_) => Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ListTile(
+            title: const Text('English'),
+            onTap: () {
+              ref.read(languageProvider.notifier).setLocale(const Locale('en'));
+              Navigator.pop(context);
+            },
+          ),
+          ListTile(
+            title: const Text('Khmer (ភាសាខ្មែរ)'),
+            onTap: () {
+              ref.read(languageProvider.notifier).setLocale(const Locale('km'));
+              Navigator.pop(context);
+            },
+          ),
+        ],
+      ),
+    );
   }
 
   void _onAboutUsClick(BuildContext context) {
@@ -53,7 +100,7 @@ class MoreScreen extends ConsumerWidget {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Sign out'),
+        title:  Text(AppLocalizations.of(context)!.signout),
         content: const Text('Are you sure you want to sign out?'),
         actions: [
           TextButton(onPressed: () => Navigator.of(context).pop(false), child: const Text('Cancel')),
@@ -79,14 +126,14 @@ class MoreScreen extends ConsumerWidget {
     return ListView(
       children: [
         // Section: Reading Preferences
-        const PreferenceSectionTitle('Reading Preferences'),
+        PreferenceSectionTitle(AppLocalizations.of(context)!.read_perference),
         ListTile(
-          title: const Text('Offline Reading'),
+          title: Text(AppLocalizations.of(context)!.offline_reading),
           trailing: const Icon(Icons.chevron_right),
           onTap: () => _onOfflineReadingClick(context),
         ),
         ListTile(
-          title: const Text('Read Articles'),
+          title: Text(AppLocalizations.of(context)!.read_articles),
           trailing: const Icon(Icons.chevron_right),
           onTap: () => _onReadArticlesClick(context),
         ),
@@ -102,39 +149,44 @@ class MoreScreen extends ConsumerWidget {
         ),
 
         // Section: App Settings
-        const PreferenceSectionTitle('App Settings'),
+        PreferenceSectionTitle(AppLocalizations.of(context)!.settings),
         ListTile(
-          title: const Text('Notifications'),
+          title: Text(AppLocalizations.of(context)!.notification),
           trailing: const Icon(Icons.chevron_right),
           onTap: () => _onNotificationsClick(context),
         ),
         ListTile(
-          title: const Text('Appearance'),
+          title: Text(AppLocalizations.of(context)!.appearance),
           trailing: const Icon(Icons.chevron_right),
-          onTap: () => _onAppearanceClick(context),
+          onTap: () => _onAppearanceClick(context, ref),
+        ),
+        ListTile(
+          title: Text(AppLocalizations.of(context)!.language),
+          trailing: const Icon(Icons.chevron_right),
+          onTap: () => _onLanguageClick(context, ref),
         ),
 
         // Section: About
-        const PreferenceSectionTitle('About'),
+        PreferenceSectionTitle(AppLocalizations.of(context)!.about),
         ListTile(
-          title: const Text('About Us'),
+          title: Text(AppLocalizations.of(context)!.about_us),
           trailing: const Icon(Icons.chevron_right),
           onTap: () => _onAboutUsClick(context),
         ),
         ListTile(
-          title: const Text('Privacy Policy'),
+          title: Text(AppLocalizations.of(context)!.privacy_policy),
           trailing: const Icon(Icons.chevron_right),
           onTap: () => _onPrivacyClick(context),
         ),
         ListTile(
-          title: const Text('Terms & Conditions'),
+          title: Text(AppLocalizations.of(context)!.terms),
           trailing: const Icon(Icons.chevron_right),
           onTap: () => _onTermsClick(context),
         ),
 
         // Sign out
         ListTile(
-          title: const Text('Sign out'),
+          title: Text(AppLocalizations.of(context)!.signout),
           trailing: const Icon(Icons.logout),
           onTap: () => _onSignOutClick(context, ref),
         ),
