@@ -6,7 +6,7 @@
 *.swp
 .buildlog/
 .history
-.idea
+.idea/
 
 
 
@@ -19,7 +19,7 @@
 /dev/bots/.recipe_deps
 /dev/bots/android_tools/
 /dev/devicelab/ABresults*.json
-/dev/docs/doc/
+/dev/doc s/doc/
 /dev/docs/flutter.docs.zip
 /dev/docs/lib/
 /dev/docs/pubspec.yaml
@@ -118,3 +118,8 @@ app.*.symbols
 !**/ios/**/default.perspectivev3
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
 !/dev/ci/**/Gemfile.lock
+/lib/firebase_options.dart
+/.env
+/devtools_options.yaml
+/android/app/google-services.json
+/ios/Runner/GoogleService-Info.plist
