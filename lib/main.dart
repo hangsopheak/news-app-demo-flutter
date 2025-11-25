@@ -1,9 +1,12 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:news_app_demo_flutter/features/auth/notifier/auth_notifier.dart';
 import 'package:news_app_demo_flutter/routes/app_routes.dart';
+import 'package:news_app_demo_flutter/shared/providers/preferences_providers.dart';
 import 'package:news_app_demo_flutter/shared/theme/theme.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // --- Imports (Adjust paths as needed) ---
 import 'features/article/ui/article_detail_screen.dart';
@@ -11,6 +14,7 @@ import 'features/auth/ui/login_screen.dart';
 import 'features/onboarding/ui/onboarding_screen.dart';
 import 'features/onboarding/utils/onboarding_util.dart';
 import 'firebase_options.dart';
+import 'l10n/app_localizations.dart';
 import 'main_screen.dart';
 import 'shared/domain/model/article.dart';
 // ----------------------------------------
@@ -38,24 +42,37 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  final sharedPreferences = await SharedPreferences.getInstance();
+
+
   runApp(
-    const ProviderScope(
-      child: MainApp(),
+    ProviderScope(
+      overrides: [
+        sharedPreferencesProvider.overrideWith((ref) => sharedPreferences),
+      ],
+      child: const MainApp(),
     ),
   );
 }
 
-class MainApp extends StatelessWidget {
+class MainApp extends ConsumerWidget {
   const MainApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'News App Demo',
-
+      localizationsDelegates: [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      supportedLocales: AppLocalizations.supportedLocales,
+      locale: ref.watch(languageProvider), // reactive with Riverpod
+      themeMode: ref.watch(themeModeProvider),
       // --- Theming ---
-      themeMode: ThemeMode.system,
       theme: NewsAppTheme.lightTheme,
       darkTheme: NewsAppTheme.darkTheme,
 
