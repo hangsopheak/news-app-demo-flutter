@@ -1,5 +1,14 @@
 import 'package:news_app_demo_flutter/core/utils/network/api_client.dart';
 import 'package:news_app_demo_flutter/shared/domain/model/category.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'category_service.g.dart';
+
+@Riverpod(keepAlive: true)
+CategoryService categoryService(Ref ref) {
+  final apiClient = ref.watch(apiClientProvider);
+  return CategoryService(apiClient: apiClient);
+}
 
 class CategoryService {
   final ApiClient _apiClient;
