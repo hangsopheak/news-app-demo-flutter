@@ -1,9 +1,15 @@
 import 'package:news_app_demo_flutter/core/utils/network/api_client.dart';
 import 'package:news_app_demo_flutter/shared/domain/model/article.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+part 'article_service.g.dart';
+
+@Riverpod(keepAlive: true)
+ArticleService articleService(Ref ref) {
+  final apiClient = ref.watch(apiClientProvider);
+  return ArticleService(apiClient: apiClient);}
 
 class ArticleService {
   final ApiClient _apiClient;
-
   ArticleService({ApiClient? apiClient})
       : _apiClient = apiClient ?? ApiClient();
 

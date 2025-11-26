@@ -1,11 +1,21 @@
 import 'package:news_app_demo_flutter/shared/data/remote/article_service.dart';
 import 'package:news_app_demo_flutter/shared/domain/model/article.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+part 'article_repository.g.dart';
+
+
+
+@Riverpod(keepAlive: true)
+ArticleRepository articleRepository(Ref ref) {
+  final service = ref.watch(articleServiceProvider);
+  return ArticleRepository(articleService: service);
+}
 
 class ArticleRepository {
   final ArticleService _articleService;
 
-  ArticleRepository({ArticleService? articleService})
-      : _articleService = articleService ?? ArticleService();
+  ArticleRepository({required ArticleService articleService})
+      : _articleService = articleService;
 
   /// Get articles with optional filters
   Future<List<Article>> getArticles({
