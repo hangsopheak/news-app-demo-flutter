@@ -1,6 +1,18 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+
+part 'api_client.g.dart';
+
+// We use keepAlive: true because we don't want to close the connection
+// or recreate this object every time we change screens.
+@Riverpod(keepAlive: true)
+ApiClient apiClient(Ref ref) {
+  return ApiClient();
+}
+
 
 class ApiClient {
   final http.Client _client;

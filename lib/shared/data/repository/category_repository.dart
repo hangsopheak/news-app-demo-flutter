@@ -1,13 +1,19 @@
 import 'package:news_app_demo_flutter/shared/data/remote/category_service.dart';
 import 'package:news_app_demo_flutter/shared/domain/model/category.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+part 'category_repository.g.dart';
 
-/// Repository for category operations
-/// Provides clean API and error handling for category data
+@Riverpod(keepAlive: true)
+CategoryRepository categoryRepository(Ref ref) {
+  final service = ref.watch(categoryServiceProvider);
+  return CategoryRepository(categoryService: service);
+}
+
 class CategoryRepository {
   final CategoryService _categoryService;
 
-  CategoryRepository({CategoryService? categoryService})
-      : _categoryService = categoryService ?? CategoryService();
+  CategoryRepository({required CategoryService categoryService})
+      : _categoryService = categoryService;
 
   Future<List<Category>> getCategories() async {
       return _categoryService.getCategories();
