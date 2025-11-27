@@ -38,6 +38,7 @@ flutter:
   assets:
     - assets/images/
     - lib/l10n/
+    - .env
   fonts:
     - family: Noto Sans Khmer
       fonts:
