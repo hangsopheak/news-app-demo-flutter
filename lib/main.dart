@@ -37,6 +37,7 @@ flutterfire configure --project=news-flutter-app-f2a2a
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env");
 
   // Load environment variables from .env file
   await dotenv.load(fileName: ".env");
