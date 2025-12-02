@@ -1,20 +1,39 @@
 import 'dart:math';
+import 'package:json_annotation/json_annotation.dart';
+
 import 'category.dart';
 
-// import 'category.dart';
 
+part 'article.g.dart';
+// -----------------------------------------------------------------------------
+// DEVELOPMENT NOTES
+//
+// To enable JSON serialization (@JsonSerializable), ensure your dependencies are set up:
+//   1. Add annotations:       flutter pub add json_annotation
+//   2. Add generator (dev):   flutter pub add --dev json_serializable
+//   3. Add build runner (dev): flutter pub add --dev build_runner
+//
+// To generate the code (.g.dart files), run:
+//   flutter pub run build_runner build --delete-conflicting-outputs
+// -----------------------------------------------------------------------------
+@JsonSerializable()
 class Article {
   final int id;
   final int categoryId;
   final String title;
   final String content;
   final String imageUrl;
+  @JsonKey(name: 'authors')
   final String? author;
   final DateTime publishedAt;
   final Category category;
+  @JsonKey(defaultValue: false)
   final bool isBreaking;
+  @JsonKey(defaultValue: false)
   final bool isFeatured;
+  @JsonKey(defaultValue: false)
   final bool isLatest;
+  @JsonKey(name: 'isBookmarked', defaultValue: false)
   final bool isBookMarked;
 
   // Helper to generate the default DateTime (similar to your Kotlin logic)
@@ -37,53 +56,13 @@ class Article {
     this.isFeatured = false,
     this.isLatest = false,
     this.isBookMarked = false,
-  }) : this.publishedAt = publishedAt ?? _defaultPublishedAt(); // Apply the default if not provided
+  }) : this.publishedAt = publishedAt ?? _defaultPublishedAt();
 
-// 2. Factory method for Deserialization (from JSON/Map)
-  factory Article.fromJson(Map<String, dynamic> json) {
-    return Article(
-      id: json['id'] as int,
-      categoryId: json['categoryId'] as int,
-      title: json['title'] as String,
-      content: json['content'] as String,
-      imageUrl: json['imageUrl'] as String,
-      author: json['author'] as String?, // Handled as nullable
+  // Factory method for deserialization - connects to generated code
+  factory Article.fromJson(Map<String, dynamic> json) => _$ArticleFromJson(json);
 
-      // Date conversion: Assumes the JSON contains an ISO 8601 string or similar
-      publishedAt: DateTime.parse(json['publishedAt'] as String),
-
-      // Deserialize the nested Category object
-      category: Category.fromJson(json['category'] as Map<String, dynamic>),
-
-      isBreaking: json['isBreaking'] as bool? ?? false, // Handle missing field with default
-      isFeatured: json['isFeatured'] as bool? ?? false,
-      isLatest: json['isLatest'] as bool? ?? false,
-      isBookMarked: json['isBookMarked'] as bool? ?? false,
-    );
-  }
-
-  // 3. Method for Serialization (to JSON/Map)
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'categoryId': categoryId,
-      'title': title,
-      'content': content,
-      'imageUrl': imageUrl,
-      'author': author, // Nullable fields can be included directly
-
-      // Date conversion: Convert DateTime to an ISO 8601 string for JSON
-      'publishedAt': publishedAt.toIso8601String(),
-
-      // Serialize the nested Category object
-      'category': category.toJson(),
-
-      'isBreaking': isBreaking,
-      'isFeatured': isFeatured,
-      'isLatest': isLatest,
-      'isBookMarked': isBookMarked,
-    };
-  }
+  // Method for serialization - connects to generated code
+  Map<String, dynamic> toJson() => _$ArticleToJson(this);
 
   // 4. copyWith method
   Article copyWith({
@@ -115,4 +94,5 @@ class Article {
       isBookMarked: isBookMarked ?? this.isBookMarked,
     );
   }
+
 }

@@ -1,3 +1,11 @@
+// This line tells the code generator to create a file named 'category.g.dart'
+import 'package:json_annotation/json_annotation.dart';
+
+part 'category.g.dart';
+
+// run command    flutter pub run build_runner build
+// or watch    flutter pub run build_runner watch
+@JsonSerializable()
 class Category {
   final int id;
   final String name;
@@ -8,20 +16,10 @@ class Category {
     required this.name,
   });
 
-  // 2. Factory method for deserialization (from a Map/JSON)
-  factory Category.fromJson(Map<String, dynamic> json) {
-    return Category(
-      id: json['id'] as int,
-      name: json['name'] as String,
-    );
-  }
+  // Factory method for deserialization - connects to generated code
+  factory Category.fromJson(Map<String, dynamic> json) => _$CategoryFromJson(json);
 
-  // 3. Method for serialization (to a Map/JSON)
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-    };
-  }
+  // Method for serialization - connects to generated code
+  Map<String, dynamic> toJson() => _$CategoryToJson(this);
 
 }
