@@ -1,158 +1,142 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widget_previews.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:news_app_demo_flutter/core/utils/device/device_utility.dart';
 import 'package:news_app_demo_flutter/features/article/ui/article_detail_screen.dart';
 import 'package:news_app_demo_flutter/features/explore/ui/widget/category_filter_chip.dart';
 import 'package:news_app_demo_flutter/shared/data/local/article_data.dart';
 import 'package:news_app_demo_flutter/shared/data/local/category_data.dart';
 import 'package:news_app_demo_flutter/shared/domain/model/article.dart';
+import 'package:news_app_demo_flutter/shared/domain/model/category.dart';
 import 'package:news_app_demo_flutter/shared/theme/theme.dart';
 import 'package:news_app_demo_flutter/shared/ui/widgets/article_card_vertical_widget.dart';
+import 'notifiers/explore_notifiers.dart';
 import 'widget/hero_article_card_widget.dart';
 
-class ExploreScreen extends StatefulWidget {
+class ExploreScreen extends ConsumerWidget {
   const ExploreScreen({super.key});
 
   @override
-  State<ExploreScreen> createState() => _ExploreScreenState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    // 1. Watch the articles provider (Logic is handled in the provider)
+    final asyncArticles = ref.watch(exploreArticlesProvider);
 
-class _ExploreScreenState extends State<ExploreScreen> {
-  int? _selectedCategoryId;
+    return Scaffold(
+      body: SafeArea(
+        child: Column(
+          children: [
+            const SizedBox(height: 16),
+            // 2. The Filter Bar is its own consumer to load independently
+            const _CategoryFilterBar(),
+            const SizedBox(height: 16),
 
-  List<Article> _getFilteredArticles() {
-    if (_selectedCategoryId == null) {
-      return ArticleData.allArticles;
-    }
-    return ArticleData.articlesByCategory[_selectedCategoryId]!.toList();
-  }
+            // 3. The Article List Area
+            Expanded(
+              child: asyncArticles.when(
+                loading: () => const Center(child: CircularProgressIndicator()),
+                error: (error, stack) => Center(child: Text('Error: $error')),
+                data: (articles) {
+                  if (articles.isEmpty) {
+                    return const Center(child: Text('No articles available'));
+                  }
 
-  @override
-  Widget build(BuildContext context) {
-    final articles = _getFilteredArticles();
-
-    if (articles.isEmpty) {
-      return const Center(
-        child: Text('No articles available'),
-      );
-    }
-
-    final isDesktop = DeviceUtils.getScreenWidth(context) > 800;
-
-    return Column(
-      children: [
-        const SizedBox(height: 16),
-        CategoryFilterChips(
-          categories: CategoryData.categories,
-          selectedCategoryId: _selectedCategoryId,
-          onCategorySelected: (id) {
-            setState(() {
-              _selectedCategoryId = id;
-            });
-          },
+                  // Use RefreshIndicator to reload articles
+                  return RefreshIndicator(
+                    onRefresh: () => ref.refresh(exploreArticlesProvider.future),
+                    child: _ArticleListContent(articles: articles),
+                  );
+                },
+              ),
+            ),
+          ],
         ),
-        const SizedBox(height: 16),
-        Expanded(
-          // NEW: Split into separate widget for clarity
-          child: _ArticleListContent(
-            articles: articles,
-            isDesktop: isDesktop,
-          ),
-        ),
-      ],
+      ),
     );
   }
 }
 
-// NEW: Separate widget for article list content
+// -----------------------------------------------------------------------------
+// Component: Category Filter Bar
+// -----------------------------------------------------------------------------
+class _CategoryFilterBar extends ConsumerWidget {
+  const _CategoryFilterBar();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final asyncCategories = ref.watch(exploreCategoriesProvider);
+    final selectedId = ref.watch(selectedCategoryProvider);
+
+    return SizedBox(
+      height: 55,
+      child: asyncCategories.when(
+        loading: () => const Center(child: SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))),
+        error: (_, __) => const SizedBox(), // Hide bar on error
+        data: (categories) {
+          return CategoryFilterChips(
+            categories: categories,
+            selectedCategoryId: selectedId,
+            onCategorySelected: (id) {
+              ref.read(selectedCategoryProvider.notifier).select(id);
+            },
+          );
+        },
+      ),
+    );
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Component: Article List Content
+// -----------------------------------------------------------------------------
 class _ArticleListContent extends StatelessWidget {
   final List<Article> articles;
-  final bool isDesktop;
 
-  const _ArticleListContent({
-    required this.articles,
-    required this.isDesktop,
-  });
+  const _ArticleListContent({required this.articles});
 
   @override
   Widget build(BuildContext context) {
+    // Separate the first article as the "Hero"
     final heroArticle = articles.first;
     final remainingArticles = articles.skip(1).toList();
 
     return CustomScrollView(
+      // Ensure physics allows pull-to-refresh even if list is short
+      physics: const AlwaysScrollableScrollPhysics(),
       slivers: [
-        // Hero Article
-        _buildHeroArticle(context, heroArticle),
-
-        // Remaining Articles (Grid or List)
-        if (isDesktop)
-          _buildArticleGrid(context, remainingArticles)
-        else
-          _buildArticleList(context, remainingArticles),
-      ],
-    );
-  }
-
-  // NEW: Extract hero article builder
-  Widget _buildHeroArticle(BuildContext context, Article heroArticle) {
-    return SliverToBoxAdapter(
-      child: Center(
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            maxWidth: isDesktop ? 1200 : double.infinity,
-          ),
+        // 1. Hero Article (Full width)
+        SliverToBoxAdapter(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: HeroArticleCard(
               article: heroArticle,
               onTap: () => _navigateToDetail(context, heroArticle),
             ),
           ),
         ),
-      ),
-    );
-  }
 
-  // NEW: Extract grid builder for desktop
-  Widget _buildArticleGrid(BuildContext context, List<Article> articles) {
-    return SliverPadding(
-      padding: const EdgeInsets.all(8),
-      sliver: SliverGrid(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-          childAspectRatio: 2.3,
-          crossAxisSpacing: 16,
-          mainAxisSpacing: 16,
+        // 2. Remaining Articles (Standard Vertical List)
+        SliverPadding(
+          padding: const EdgeInsets.all(16),
+          sliver: SliverList(
+            delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                final article = remainingArticles[index];
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 16.0),
+                  child: ArticleCardVerticalWidget(
+                    article: article,
+                    onTap: () => _navigateToDetail(context, article),
+                  ),
+                );
+              },
+              childCount: remainingArticles.length,
+            ),
+          ),
         ),
-        delegate: SliverChildBuilderDelegate(
-              (context, index) {
-            return ArticleCardVerticalWidget(
-              article: articles[index],
-              onTap: () => _navigateToDetail(context, articles[index]),
-            );
-          },
-          childCount: articles.length,
-        ),
-      ),
+      ],
     );
   }
 
-  // NEW: Extract list builder for mobile
-  Widget _buildArticleList(BuildContext context, List<Article> articles) {
-    return SliverList(
-      delegate: SliverChildBuilderDelegate(
-            (context, index) {
-          return ArticleCardVerticalWidget(
-            article: articles[index],
-            onTap: () => _navigateToDetail(context, articles[index]),
-          );
-        },
-        childCount: articles.length,
-      ),
-    );
-  }
-
-  // NEW: Extract navigation method to avoid repetition
   void _navigateToDetail(BuildContext context, Article article) {
     Navigator.push(
       context,
@@ -161,17 +145,4 @@ class _ArticleListContent extends StatelessWidget {
       ),
     );
   }
-}
-// Preview
-@Preview(name: 'Explore Screen')
-Widget ExploreScreenPreview() {
-  return MaterialApp(
-    theme: NewsAppTheme.lightTheme,
-    home: Scaffold(
-      appBar: AppBar(
-        title: const Text('Explore'),
-      ),
-      body: const ExploreScreen(),
-    ),
-  );
 }
