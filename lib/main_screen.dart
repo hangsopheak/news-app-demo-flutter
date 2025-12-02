@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:news_app_demo_flutter/features/bookmark/bookmark_screen.dart';
+import 'package:news_app_demo_flutter/features/bookmark/ui/bookmark_screen.dart';
 import 'package:news_app_demo_flutter/features/explore/ui/explore_screen.dart';
 import 'package:news_app_demo_flutter/features/home/ui/home_screen.dart';
 import 'package:news_app_demo_flutter/features/more/ui/more_screen.dart';
