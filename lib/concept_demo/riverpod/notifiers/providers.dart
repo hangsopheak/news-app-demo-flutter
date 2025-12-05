@@ -3,7 +3,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart'; // Import this if
 // Ensure this line is present and matches your generated file name!
 part 'providers.g.dart';
 
-
+// Use command flutter pub run build_runner build --delete-conflicting-outputs
 // --- 1. Simple Value Provider ---
 @riverpod
 String appName(Ref ref) {
