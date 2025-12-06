@@ -52,7 +52,7 @@ final class ArticleListByFlagNotifierProvider
 }
 
 String _$articleListByFlagNotifierHash() =>
-    r'd04dc20199c39bb4567b62f42cc67e6eab51c780';
+    r'e2c638d4b66029d144c59e39ad8a48cc98169c33';
 
 final class ArticleListByFlagNotifierFamily extends $Family
     with
