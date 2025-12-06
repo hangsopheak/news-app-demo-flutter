@@ -60,12 +60,13 @@ class BookmarkScreen extends ConsumerWidget {
     );
   }
 
-  void _onArticleTap(BuildContext context, WidgetRef ref, Article article) {
-    Navigator.push(
+  Future<void> _onArticleTap(BuildContext context, WidgetRef ref, Article article) async {
+    await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => ArticleDetailScreen(article: article),
       ),
     );
+    ref.invalidate(bookmarkProvider);
   }
 }

@@ -12,7 +12,7 @@ Article _$ArticleFromJson(Map<String, dynamic> json) => Article(
   title: json['title'] as String,
   content: json['content'] as String,
   imageUrl: json['imageUrl'] as String,
-  author: json['authors'] as String?,
+  author: json['author'] as String?,
   publishedAt: json['publishedAt'] == null
       ? null
       : DateTime.parse(json['publishedAt'] as String),
@@ -29,9 +29,9 @@ Map<String, dynamic> _$ArticleToJson(Article instance) => <String, dynamic>{
   'title': instance.title,
   'content': instance.content,
   'imageUrl': instance.imageUrl,
-  'authors': instance.author,
+  'author': instance.author,
   'publishedAt': instance.publishedAt.toIso8601String(),
-  'category': instance.category,
+  'category': instance.category.toJson(),
   'isBreaking': instance.isBreaking,
   'isFeatured': instance.isFeatured,
   'isLatest': instance.isLatest,

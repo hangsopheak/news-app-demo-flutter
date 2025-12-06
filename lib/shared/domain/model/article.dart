@@ -16,14 +16,16 @@ part 'article.g.dart';
 // To generate the code (.g.dart files), run:
 //   flutter pub run build_runner build --delete-conflicting-outputs
 // -----------------------------------------------------------------------------
-@JsonSerializable()
-class Article {
+@JsonSerializable(
+  // because those databases only understand primitive types (Maps/Lists/Strings),
+  // not Dart object instances like category.
+  explicitToJson: true,
+)class Article {
   final int id;
   final int categoryId;
   final String title;
   final String content;
   final String imageUrl;
-  @JsonKey(name: 'authors')
   final String? author;
   final DateTime publishedAt;
   final Category category;
