@@ -14,6 +14,7 @@ ArticleRepository articleRepository(Ref ref) {
 class ArticleRepository {
   final ArticleService _articleService;
 
+
   ArticleRepository({required ArticleService articleService})
       : _articleService = articleService;
 
@@ -47,9 +48,6 @@ class ArticleRepository {
 
   Future<List<Article>> getBreakingNews() =>
       _articleService.getBreakingNews();
-
-  Future<List<Article>> getBookmarkedArticles() =>
-      _articleService.getBookmarkedArticles();
 
   Future<List<Article>> getArticlesByCategory(int categoryId) =>
       _articleService.getArticlesByCategory(categoryId);
