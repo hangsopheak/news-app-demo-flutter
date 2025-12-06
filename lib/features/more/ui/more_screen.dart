@@ -6,6 +6,7 @@ import 'package:news_app_demo_flutter/features/auth/ui/login_screen.dart';
 import 'package:news_app_demo_flutter/l10n/app_localizations.dart';
 import 'package:news_app_demo_flutter/shared/providers/preferences_providers.dart';
 
+import 'platform_demo/camera_demo_screen.dart';
 import 'platform_demo/os_status_demo_screen.dart';
 
 class MoreScreen extends ConsumerWidget {
@@ -249,7 +250,12 @@ class MoreScreen extends ConsumerWidget {
     );
   }
 
-  void _onCameraDemoClick(BuildContext context) {}
+  void _onCameraDemoClick(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const CameraDemoScreen()),
+    );
+  }
 
   void _onLocationDemoClick(BuildContext context) {}
 
