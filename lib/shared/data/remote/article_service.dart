@@ -64,8 +64,6 @@ class ArticleService {
 
   Future<List<Article>> getBreakingNews() => getArticles(isBreaking: true);
 
-  Future<List<Article>> getBookmarkedArticles() => getArticles(isBookmarked: true);
-
   Future<List<Article>> getArticlesByCategory(int categoryId) =>
       getArticles(categoryId: categoryId);
 

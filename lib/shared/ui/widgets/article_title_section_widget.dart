@@ -5,11 +5,12 @@ import 'package:news_app_demo_flutter/shared/data/local/article_data.dart';
 import 'package:news_app_demo_flutter/shared/domain/model/article.dart';
 import 'package:news_app_demo_flutter/shared/theme/theme.dart';
 
+import 'article_bookmark_button.dart';
+
 class ArticleTitleSectionWidget extends StatelessWidget {
   final Article article;
   final double titleFontSize;
   final bool showBookMark;
-  final VoidCallback? onBookmarkTap;
   final VoidCallback? onShareTap;
 
   const ArticleTitleSectionWidget({
@@ -17,7 +18,6 @@ class ArticleTitleSectionWidget extends StatelessWidget {
     required this.article,
     this.titleFontSize = 20,
     this.showBookMark = true,
-    this.onBookmarkTap,
     this.onShareTap,
   });
 
@@ -83,18 +83,7 @@ class ArticleTitleSectionWidget extends StatelessWidget {
                 ),
               ),
               if (showBookMark) ...[
-                IconButton(
-                  onPressed: onBookmarkTap,
-                  icon: Icon(
-                    article.isBookMarked ? Icons.bookmark : Icons.bookmark_border,
-                    size: 20,
-                    color: article.isBookMarked
-                        ? theme.colorScheme.primary
-                        : theme.colorScheme.onSurface,
-                  ),
-                  padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(),
-                ),
+                ArticleBookmarkButton(article: article),
                 IconButton(
                   onPressed: onShareTap,
                   icon: Icon(
@@ -125,9 +114,6 @@ Widget ArticleTitleSectionPreview() {
           padding: const EdgeInsets.all(16),
           child: ArticleTitleSectionWidget(
             article: ArticleData.allArticles[1],
-            onBookmarkTap: () {
-              debugPrint('Bookmark tapped');
-            },
             onShareTap: () {
               debugPrint('Share tapped');
             },

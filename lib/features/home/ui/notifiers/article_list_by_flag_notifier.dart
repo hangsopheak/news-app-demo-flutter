@@ -1,3 +1,4 @@
+import 'package:news_app_demo_flutter/features/bookmark/data/repository/bookmark_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:news_app_demo_flutter/shared/data/repository/article_repository.dart';
 import 'package:news_app_demo_flutter/shared/domain/model/article.dart';
@@ -26,7 +27,7 @@ class ArticleListByFlagNotifier extends _$ArticleListByFlagNotifier {
       case 3:
         return repository.getFeaturedArticles();
       case 4:
-        return repository.getBookmarkedArticles();
+        return ref.watch(bookmarkRepositoryProvider).getBookmarkedArticles();
       default:
         return [];
     }

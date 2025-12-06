@@ -3,13 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:news_app_demo_flutter/features/auth/notifier/auth_notifier.dart';
+import 'package:news_app_demo_flutter/features/bookmark/data/local/bookmark_service.dart';
 import 'package:news_app_demo_flutter/routes/app_routes.dart';
+import 'package:news_app_demo_flutter/features/bookmark/data/local/bookmark_provider.dart';
 import 'package:news_app_demo_flutter/shared/providers/preferences_providers.dart';
 import 'package:news_app_demo_flutter/shared/theme/theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-// --- Imports (Adjust paths as needed) ---
 import 'features/article/ui/article_detail_screen.dart';
 import 'features/auth/ui/login_screen.dart';
 import 'features/onboarding/ui/onboarding_screen.dart';
@@ -39,8 +40,11 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
 
-  // Load environment variables from .env file
-  await dotenv.load(fileName: ".env");
+  // 1. Init Hive
+  await Hive.initFlutter();
+
+  // 2. Open Box (Do this ONCE at app start)
+  final box = await Hive.openBox<Map>('bookmarks');
 
   // Initialize Firebase with the generated options
   await Firebase.initializeApp(
@@ -54,6 +58,7 @@ void main() async {
     ProviderScope(
       overrides: [
         sharedPreferencesProvider.overrideWith((ref) => sharedPreferences),
+        bookmarkServiceProvider.overrideWithValue(BookmarkService(box)),
       ],
       child: const MainApp(),
     ),
